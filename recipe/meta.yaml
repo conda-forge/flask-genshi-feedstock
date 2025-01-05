@@ -11,28 +11,30 @@ package:
 
 source:
   fn: {{ name }}-{{ version }}.{{ compress_type }}
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ compress_type }}
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ compress_type }}
   {{ hash_type }}: {{ hash_val }}
 
 build:
   noarch: python
   number: {{ build_num }}
-  script: python -m pip install --no-deps --ignore-installed .
+  script: {{ PYTHON }} -m pip install . --no-deps -vv
 
 requirements:
   host:
     - pip
-    - python
+    - python {{ python_min }}
     - setuptools
     - flask
     - genshi >=0.5
 
   run:
-    - python
+    - python >={{ python_min }}
     - flask
     - genshi >=0.5
 
 test:
+  requires:
+    - python {{ python_min }}
   imports:
     - flaskext
     - flaskext.genshi
